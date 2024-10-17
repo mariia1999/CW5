@@ -4,6 +4,7 @@ from classes.hh_parser import HHParser
 
 
 def create_database(db_name):
+    """создание БД"""
     con = psycopg2.connect(dbname="postgres", **config())
     con.autocommit = True
     cur = con.cursor()
@@ -15,6 +16,7 @@ def create_database(db_name):
 
 
 def create_tables(db_name):
+    """создание таблиц"""
     con = psycopg2.connect(dbname=db_name, **config())
     with con:
         with con.cursor() as cur:
@@ -27,6 +29,7 @@ def create_tables(db_name):
 
 
 def insert_data_in_tables(db_name):
+    """заполнение таблицы"""
     hh = HHParser()
     employers = hh.get_employers()
     vacancies = hh.get_vacancies()

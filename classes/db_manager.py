@@ -3,6 +3,7 @@ from utils.config import config
 
 
 class DBManager:
+    """класс для подключения к БД PostgreSQL"""
     def __init__(self, db_name):
         self.__db_name = db_name
 
@@ -16,24 +17,30 @@ class DBManager:
         return result
 
     def get_companies_and_vacancies_count(self):
+        """получает список всех компаний и количество вакансий у каждой компании"""
         query = ("SELECT e.name, COUNT(v.id) AS vacancy_count FROM employers e "
                  "JOIN vacancies v ON e.id = v.employer GROUP BY e.name")
         return self.__execute_query(query)
 
     def get_all_vacancies(self):
+        """получает список всех вакансий с указанием названия компании, названия вакансии и зарплаты
+        и ссылки на вакансию"""
         query = ("SELECT * FROM vacancies "
                  "JOIN employers ON vacancies.employer = employers.id")
         return self.__execute_query(query)
 
     def get_avg_salary(self):
+        """получает среднюю зарплату по вакансиям"""
         query = "SELECT AVG(salary_from) FROM vacancies"
         return self.__execute_query(query)
 
     def get_vacancies_with_higher_salary(self):
+        """получает список всех вакансий, у которых зарплата выше средней по всем вакансиям"""
         query = "SELECT salary_from FROM vacancies ORDER BY salary_from DESC"
         return self.__execute_query(query)
 
     def get_vacancies_with_keyword(self, user_query):
+        """получает список всех вакансий, в названии которых содержатся переданные в метод слова"""
         query = f"SELECT * FROM vacancies WHERE name LIKE '%{user_query}%'"
         return self.__execute_query(query)
 

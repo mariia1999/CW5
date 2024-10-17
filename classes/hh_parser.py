@@ -5,12 +5,14 @@ class HHParser:
 
     @staticmethod
     def __get_response():
+        """получает ответ от HH"""
         params = {"sort_by": "by_vacancies_open"}
         response = requests.get("https://api.hh.ru/employers", params=params)
         if response.status_code == 200:
             return response.json()["items"]
 
     def get_employers(self):
+        """получает работодателей"""
         data = self.__get_response()
         employers = []
         for employer in data:
@@ -18,6 +20,7 @@ class HHParser:
         return employers
 
     def get_vacancies(self):
+        """получает вакансии"""
         employers = self.get_employers()
         vacancies = []
         for employer in employers:
@@ -30,6 +33,7 @@ class HHParser:
 
     @staticmethod
     def __filter_vacancies(vacancies):
+        """фильтрует вакансии"""
         filtered_vacancies = []
         for vacancy in vacancies:
             if vacancy["salary"] is None:
@@ -46,8 +50,7 @@ class HHParser:
                 "salary_to": salary_to,
                 "employer": vacancy["employer"]["id"]
             })
-            return filtered_vacancies
+        return filtered_vacancies
 
 
-hh = HHParser()
-print(len(hh.get_vacancies()))
+
