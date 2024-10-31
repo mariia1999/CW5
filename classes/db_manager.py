@@ -25,7 +25,7 @@ class DBManager:
     def get_all_vacancies(self):
         """получает список всех вакансий с указанием названия компании, названия вакансии и зарплаты
         и ссылки на вакансию"""
-        query = ("SELECT * FROM vacancies "
+        query = ("SELECT vacancies.name, salary_from, salary_to, employer FROM vacancies "
                  "JOIN employers ON vacancies.employer = employers.id")
         return self.__execute_query(query)
 
@@ -36,7 +36,7 @@ class DBManager:
 
     def get_vacancies_with_higher_salary(self):
         """получает список всех вакансий, у которых зарплата выше средней по всем вакансиям"""
-        query = "SELECT salary_from FROM vacancies ORDER BY salary_from DESC"
+        query = "SELECT * FROM vacancies WHERE salary_from > (SELECT AVG(salary_from) FROM vacancies)"
         return self.__execute_query(query)
 
     def get_vacancies_with_keyword(self, user_query):
